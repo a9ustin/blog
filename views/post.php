@@ -1,5 +1,6 @@
 <?php
 // views/post.php - Posts CRUD
+require_once 'config.php';
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 $message = '';
@@ -77,19 +78,19 @@ if ($action === 'delete' && isAuthor() && $id) {
                 </tr>
             </thead>
             <tbody>
-                <?php if ($posts->num_rows > 0): ?>
+                <?php if ($posts && $posts->num_rows > 0): ?>
                 <?php while ($post = $posts->fetch_assoc()): ?>
                 <tr>
-                    <td><?php echo htmlspecialchars($post['title']); ?></td>
-                    <td><?php echo htmlspecialchars($post['name']); ?></td>
-                    <td><?php echo date('d M Y H:i', strtotime($post['date'])); ?></td>
+                    <td><?php echo $post['title']; ?></td>
+                    <td><?php echo $post['name']; ?></td>
+                    <td><?php echo date('d M Y H:i', strtotime($post['created_at'])); ?></td>
                     <td>
-                        <a href="index.php?page=post&action=view&id=<?php echo $post['idpost']; ?>"
+                        <a href="index.php?page=post&action=view&id=<?php echo $post['id']; ?>"
                             class="btn btn-sm btn-info">Lihat</a>
                         <?php if (isAuthor() && ($post['username'] === $_SESSION['username'] || isAdmin())): ?>
-                        <a href="index.php?page=post&action=edit&id=<?php echo $post['idpost']; ?>"
+                        <a href="index.php?page=post&action=edit&id=<?php echo $post['id']; ?>"
                             class="btn btn-sm btn-warning">Edit</a>
-                        <a href="index.php?page=post&action=delete&id=<?php echo $post['idpost']; ?>"
+                        <a href="index.php?page=post&action=delete&id=<?php echo $post['id']; ?>"
                             class="btn btn-sm btn-danger"
                             onclick="return confirm('Apakah Anda yakin ingin menghapus post ini?')">Hapus</a>
                         <?php endif; ?>
@@ -111,22 +112,21 @@ if ($action === 'delete' && isAuthor() && $id) {
         <?php else: ?>
         <div class="card mb-4">
             <div class="card-header">
-                <h3><?php echo htmlspecialchars($post['title']); ?></h3>
+                <h3><?php echo $post['title']; ?></h3>
                 <p class="text-muted">
-                    Oleh: <?php echo htmlspecialchars($post['name']); ?> |
-                    <?php echo date('d M Y H:i', strtotime($post['date'])); ?>
+                    Oleh: <?php echo $post['name']; ?> |
+                    <?php echo date('d M Y H:i', strtotime($post['created_at'])); ?>
                 </p>
             </div>
             <div class="card-body">
                 <div class="post-content">
-                    <?php echo nl2br(htmlspecialchars($post['content'])); ?>
+                    <?php echo nl2br($post['content']); ?>
                 </div>
             </div>
             <div class="card-footer">
                 <?php if (isAuthor() && ($post['username'] === $_SESSION['username'] || isAdmin())): ?>
-                <a href="index.php?page=post&action=edit&id=<?php echo $post['idpost']; ?>"
-                    class="btn btn-warning">Edit</a>
-                <a href="index.php?page=post&action=delete&id=<?php echo $post['idpost']; ?>" class="btn btn-danger"
+                <a href="index.php?page=post&action=edit&id=<?php echo $post['id']; ?>" class="btn btn-warning">Edit</a>
+                <a href="index.php?page=post&action=delete&id=<?php echo $post['id']; ?>" class="btn btn-danger"
                     onclick="return confirm('Apakah Anda yakin ingin menghapus post ini?')">Hapus</a>
                 <?php endif; ?>
                 <a href="index.php?page=post" class="btn btn-secondary">Kembali</a>
@@ -168,12 +168,12 @@ if ($action === 'delete' && isAuthor() && $id) {
                     <div class="mb-3">
                         <label for="title" class="form-label">Judul</label>
                         <input type="text" class="form-control" id="title" name="title"
-                            value="<?php echo htmlspecialchars($post['title']); ?>" required>
+                            value="<?php echo $post['title']; ?>" required>
                     </div>
                     <div class="mb-3">
                         <label for="content" class="form-label">Konten</label>
                         <textarea class="form-control" id="content" name="content" rows="10"
-                            required><?php echo htmlspecialchars($post['content']); ?></textarea>
+                            required><?php echo $post['content']; ?></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Update</button>
                     <a href="index.php?page=post" class="btn btn-secondary">Batal</a>

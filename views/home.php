@@ -1,5 +1,6 @@
 <?php
 // views/home.php - Home page
+require_once 'config.php';
 $posts = getAllPosts();
 ?>
 
@@ -9,20 +10,20 @@ $posts = getAllPosts();
         <p>Selamat datang di Blog Sederhana. Lihat post terbaru di bawah ini.</p>
 
         <div class="row">
-            <?php if ($posts->num_rows > 0): ?>
+            <?php if ($posts && $posts->num_rows > 0): ?>
             <?php while ($post = $posts->fetch_assoc()): ?>
             <div class="col-md-6 mb-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title"><?php echo htmlspecialchars($post['title']); ?></h5>
+                        <h5 class="card-title"><?php echo $post['title']; ?></h5>
                         <h6 class="card-subtitle mb-2 text-muted">
-                            Oleh: <?php echo htmlspecialchars($post['name']); ?> |
-                            <?php echo date('d M Y H:i', strtotime($post['date'])); ?>
+                            Oleh: <?php echo $post['name']; ?> |
+                            <?php echo date('d M Y H:i', strtotime($post['created_at'])); ?>
                         </h6>
                         <p class="card-text">
-                            <?php echo substr(htmlspecialchars($post['content']), 0, 150); ?>...
+                            <?php echo substr($post['content'], 0, 150); ?>...
                         </p>
-                        <a href="index.php?page=post&action=view&id=<?php echo $post['idpost']; ?>"
+                        <a href="index.php?page=post&action=view&id=<?php echo $post['id']; ?>"
                             class="btn btn-primary btn-sm">Baca Selengkapnya</a>
                     </div>
                 </div>

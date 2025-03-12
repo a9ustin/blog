@@ -16,8 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $password = $_POST['password'];
         $name = $_POST['name'];
         $role = $_POST['role'];
+        $gender = $_POST['gender'];
 
-        if (createAccount($username, $password, $name, $role)) {
+        if (createAccount($username, $password, $name, $role, $gender)) {
             $message = showSuccess('Akun berhasil dibuat!');
             $action = 'list';
         } else {
@@ -27,8 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $password = $_POST['password'];
         $name = $_POST['name'];
         $role = $_POST['role'];
+        $gender = $_POST['gender'];
 
-        if (updateAccount($username, $password, $name, $role)) {
+        if (updateAccount($username, $password, $name, $role, $gender)) {
             $message = showSuccess('Akun berhasil diupdate!');
             $action = 'list';
         } else {
@@ -69,6 +71,7 @@ if ($action === 'delete' && $username) {
                 <tr>
                     <th>Username</th>
                     <th>Nama</th>
+                    <th>Jenis Kelamin</th>
                     <th>Role</th>
                     <th>Aksi</th>
                 </tr>
@@ -79,6 +82,7 @@ if ($action === 'delete' && $username) {
                 <tr>
                     <td><?php echo htmlspecialchars($account['username']); ?></td>
                     <td><?php echo htmlspecialchars($account['name']); ?></td>
+                    <td><?php echo htmlspecialchars($account['gender']); ?></td>
                     <td><?php echo htmlspecialchars($account['role']); ?></td>
                     <td>
                         <a href="index.php?page=account&action=edit&username=<?php echo $account['username']; ?>"
@@ -118,6 +122,13 @@ if ($action === 'delete' && $username) {
                         <input type="text" class="form-control" id="name" name="name" required>
                     </div>
                     <div class="mb-3">
+                        <label for="gender" class="form-label">Jenis Kelamin</label>
+                        <select class="form-select" id="gender" name="gender" required>
+                            <option value="Laki-laki">Laki-Laki</option>
+                            <option value="Perempuan">Perempuan</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label for="role" class="form-label">Role</label>
                         <select class="form-select" id="role" name="role" required>
                             <option value="admin">Admin</option>
@@ -155,6 +166,19 @@ if ($action === 'delete' && $username) {
                         <label for="name" class="form-label">Nama</label>
                         <input type="text" class="form-control" id="name" name="name"
                             value="<?php echo htmlspecialchars($account['name']); ?>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="gender" class="form-label">Jenis Kelamin</label>
+                        <select class="form-select" id="gender" name="gender" required>
+                            <option value="Laki-laki"
+                                <?php echo $account['gender'] === 'Laki-laki' ? 'selected' : ''; ?>>
+                                Laki-Laki
+                            </option>
+                            <option value="Perempuan"
+                                <?php echo $account['gender'] === 'Perempuan' ? 'selected' : ''; ?>>
+                                Perempuan
+                            </option>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="role" class="form-label">Role</label>
